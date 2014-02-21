@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beans.GossipBean;
+import beans.PictureBean;
 
 public class GossipDao {
 
@@ -73,6 +74,136 @@ public class GossipDao {
 		}
 
 		return empty;
+	}
+	
+public int getRecords(){
+		
+		int num = 0;
+		// ProjectHelper helper = new ProjectHelper();
+		DBConnectionHelper dbHelper = new DBConnectionHelper();
+		Connection con = dbHelper.connectDatabase();
+		Statement s = null;
+		ResultSet rs = null;
+		String sql = "select count(*) as num from " + dbHelper.getTable();
+		System.out.println(sql);
+		try {
+			s = con.createStatement();
+			rs = s.executeQuery(sql);
+			while (rs.next()) {
+				num = rs.getInt("num");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (s != null) {
+				DBConnectionHelper.closeStatement(s);
+			}
+			if (con != null) {
+				DBConnectionHelper.closeConnection(con);
+			}
+
+		}
+		return num;
+	}
+	
+	public int getRecords(String movie_id){
+		
+		int num = 0;
+		// ProjectHelper helper = new ProjectHelper();
+		DBConnectionHelper dbHelper = new DBConnectionHelper();
+		Connection con = dbHelper.connectDatabase();
+		Statement s = null;
+		ResultSet rs = null;
+		String sql = "select count(*) as num from " + dbHelper.getTable() +" where movie_id='"+movie_id+"'";
+		System.out.println(sql);
+		try {
+			s = con.createStatement();
+			rs = s.executeQuery(sql);
+			while (rs.next()) {
+				num = rs.getInt("num");
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (s != null) {
+				DBConnectionHelper.closeStatement(s);
+			}
+			if (con != null) {
+				DBConnectionHelper.closeConnection(con);
+			}
+
+		}
+		return num;
+	}
+	
+	public List<GossipBean> getPageEntries(int begin, int pages,  String movie_id) {
+		List<GossipBean> pictures = new ArrayList<GossipBean>();
+		// ProjectHelper helper = new ProjectHelper();
+		DBConnectionHelper dbHelper = new DBConnectionHelper();
+		Connection con = dbHelper.connectDatabase();
+		Statement s = null;
+		ResultSet rs = null;
+
+		String sql = "select * from " + dbHelper.getTable() + " where  movie_id='"+movie_id+"' limit " + begin + "," + pages;
+		System.out.println(sql);
+		try {
+			s = con.createStatement();
+			rs = s.executeQuery(sql);
+			pictures = getGossipBeans(rs);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				DBConnectionHelper.closeResultSet(rs);
+			}
+			if (s != null) {
+				DBConnectionHelper.closeStatement(s);
+			}
+			if (con != null) {
+				DBConnectionHelper.closeConnection(con);
+			}
+
+		}
+		return pictures;
+	}
+	
+	public List<GossipBean> getPageEntries(int begin, int pages) {
+		List<GossipBean> pictures = new ArrayList<GossipBean>();
+		// ProjectHelper helper = new ProjectHelper();
+		DBConnectionHelper dbHelper = new DBConnectionHelper();
+		Connection con = dbHelper.connectDatabase();
+		Statement s = null;
+		ResultSet rs = null;
+
+		String sql = "select * from " + dbHelper.getTable() + " limit " + begin + "," + pages;
+		System.out.println(sql);
+		try {
+			s = con.createStatement();
+			rs = s.executeQuery(sql);
+			pictures = getGossipBeans(rs);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			if (rs != null) {
+				DBConnectionHelper.closeResultSet(rs);
+			}
+			if (s != null) {
+				DBConnectionHelper.closeStatement(s);
+			}
+			if (con != null) {
+				DBConnectionHelper.closeConnection(con);
+			}
+
+		}
+		return pictures;
 	}
 
 }

@@ -28,9 +28,6 @@ public class GoodOrNotServlet extends HttpServlet {
 		super();
 		memory = new LinkedHashMap<String, Object>();
 		lp = new LikeProcess();
-		// for(int i = 1; i <= 100; i++ ){
-		// memory.put( i+".JPG", 0);
-		// }
 
 	}
 
@@ -93,7 +90,7 @@ public class GoodOrNotServlet extends HttpServlet {
 					isLike = false;
 				}
 			} else {
-				if ((int) memory.get(id) == 1) {
+				if ( Integer.parseInt(memory.get(id) == 1)) {
 					isLike = false;
 					memory.remove(id);
 					memory.put(id, 0);

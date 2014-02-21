@@ -23,7 +23,8 @@ public class GetImagesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	final int NUMBER_OF_PER_PAGE = 15;
 
-	int records_number, pages_number, current_page;
+	static int  records_number; 
+	static int pages_number,current_page;
 	int groups, group_current;
 	String movie_id = "";
 	PaginationProcess pp = new PaginationProcess();

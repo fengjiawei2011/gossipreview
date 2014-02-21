@@ -10,8 +10,18 @@
   	<description></description>
   	<servlet-class>servlet.GossipShowServlet</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>PagenationServlet</servlet-name>
+  	<display-name>PagenationServlet</display-name>
+  	<description></description>
+  	<servlet-class>servlet.PagenationServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>GossipShowServlet</servlet-name>
   	<url-pattern>/GossipShowServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>PagenationServlet</servlet-name>
+  	<url-pattern>/PagenationServlet</url-pattern>
   </servlet-mapping>
 </web-app>

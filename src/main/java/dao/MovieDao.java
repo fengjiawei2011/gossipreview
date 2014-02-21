@@ -20,8 +20,7 @@ public class MovieDao {
 		/* Connection con = dbHelper.connectDatabase(); */
 		Statement s = null;
 		ResultSet rs = null;
-		String sql = "select DISTINCT(`movie_id`), movie_name from `Rideo`.`"
-				+ dbHelper.getTable() + "`";
+		String sql = "select DISTINCT(`movie_id`), movie_name from "+ dbHelper.getTable();
 		try {
 			s = con.createStatement();
 			rs = s.executeQuery(sql);

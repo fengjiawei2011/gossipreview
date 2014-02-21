@@ -6,12 +6,12 @@
 <%
 	//List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
 	List<GossipBean> pictures = (List<GossipBean>) request.getAttribute("gossips");
-	//List<MovieBean> movies = (List<MovieBean>) session.getAttribute("movies");
+	List<MovieBean> movies = (List<MovieBean>) request.getAttribute("movies");
 	String group = request.getParameter("group");
 	String interest = "";
 	String currentPage = request.getParameter("current_page");
-	String pages = request.getParameter("pages_number");
-	//MovieBean current_movie = (MovieBean)session.getAttribute("current_movie");
+	String pages = request.getParameter("pages_num");
+	MovieBean current_movie = (MovieBean)session.getAttribute("current_movie");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -174,17 +174,32 @@
 	<div>
 		<ul class="pager">
 			<li><a href="#" onclick="save()">save</a></li>
-			<li id="prev"><a href="show?operation=prev"
+			<li id="prev"><a href= "showgossips?operation=prev&pages_num=<%=pages%>&current_page=<%=currentPage%>"
 				onclick="return prev()">Previous</a></li>
 			<li><span> <label id="currentPage"><%=currentPage%></label>
 					of <label id="pages"><%=pages%></label>
 			</span></li>
-			<li id="next"><a href="show?operation=next"
+			<li id="next"><a href="showgossips?operation=next&pages_num=<%=pages%>&current_page=<%=currentPage%>"
 				onclick="return next()">Next</a></li>
-			<li id="saveNext"><a href="show?operation=saveNext"
+			<li id="saveNext"><a href="showgossips?operation=saveNext"
 				onclick="return next()">Save&Next</a></li>
 			<li>
-			
+			<li>
+				<div class="btn-group">
+					<button type="button" class="btn btn-info dropdown-toggle"
+						data-toggle="dropdown">
+						<% if(current_movie != null){ %> <%=current_movie.getMovie_name() %>
+						
+						<%}else{ %>Choose Movie <%} %><span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<%for (MovieBean movie : movies) {%>
+						<li><a href="showgossips?movie_id=<%=movie.getMovie_id()%>&operation=chooseMovie"><%=movie.getMovie_name()%></a></li>
+						<%}%>
+					</ul>
+				</div>
+
+			</li>
 			</li>
 		</ul>
 	</div>

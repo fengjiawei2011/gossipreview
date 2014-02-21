@@ -9,77 +9,48 @@ import java.sql.Statement;
 import java.util.List;
 
 import dao.GossipDao;
+import dao.MovieDao;
 import beans.GossipBean;
+import beans.MovieBean;
+import beans.PictureBean;
 
 public class GossipProcess {
-	
+	GossipDao gd = new GossipDao();
 	public List<GossipBean> getAllGossips(){
-		GossipDao gd = new GossipDao();
+		
 		return gd.getAllEntries();
+	}
+	
+	public List<GossipBean> getGossipsByPage(int whichPage, int pages,
+			String movie_id) {
+
+		int begin = pages * (whichPage - 1);
+		return gd.getPageEntries(begin, pages, movie_id);
+	}
+
+	public List<GossipBean> getGossipsByPage(int whichPage, int pages) {
+
+		int begin = pages * (whichPage - 1);
+		return gd.getPageEntries(begin, pages);
 	}
 	
 	public int getRecords(){
 		
-		int num = 0;
-		// ProjectHelper helper = new ProjectHelper();
-		DBConnectionHelper dbHelper = new DBConnectionHelper();
-		Connection con = dbHelper.connectDatabase();
-		Statement s = null;
-		ResultSet rs = null;
-		String sql = "select count(*) as num from " + dbHelper.getTable();
-		System.out.println(sql);
-		try {
-			s = con.createStatement();
-			rs = s.executeQuery(sql);
-			while (rs.next()) {
-				num = rs.getInt("num");
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (s != null) {
-				DBConnectionHelper.closeStatement(s);
-			}
-			if (con != null) {
-				DBConnectionHelper.closeConnection(con);
-			}
-
-		}
-		return num;
+		return gd.getRecords();
 	}
 	
 	public int getRecords(String movie_id){
 		
-		int num = 0;
-		// ProjectHelper helper = new ProjectHelper();
-		DBConnectionHelper dbHelper = new DBConnectionHelper();
-		Connection con = dbHelper.connectDatabase();
-		Statement s = null;
-		ResultSet rs = null;
-		String sql = "select count(*) as num from " + dbHelper.getTable() +" where movie_id='"+movie_id+"'";
-		System.out.println(sql);
-		try {
-			s = con.createStatement();
-			rs = s.executeQuery(sql);
-			while (rs.next()) {
-				num = rs.getInt("num");
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			if (s != null) {
-				DBConnectionHelper.closeStatement(s);
-			}
-			if (con != null) {
-				DBConnectionHelper.closeConnection(con);
-			}
-
-		}
-		return num;
+		return gd.getRecords(movie_id);
+	}
+	
+	MovieDao md = new MovieDao();
+	DBConnectionHelper helper = new DBConnectionHelper();
+	public List<MovieBean> getMovies(){
+		Connection con = helper.connectDatabase();
+		List<MovieBean> movies = md.getMovies(con);
+		DBConnectionHelper.closeConnection(con);
+		return movies;
 	}
 
 }
