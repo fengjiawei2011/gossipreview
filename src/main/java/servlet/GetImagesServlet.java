@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import process.CatalogProcess;
 import process.PaginationProcess;
+import beans.MovieBean;
 import beans.PictureBean;
 
 /**
@@ -19,16 +21,20 @@ import beans.PictureBean;
 @WebServlet("/show")
 public class GetImagesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	final int NUMBER_OF_PER_PAGE = 5;
+	final int NUMBER_OF_PER_PAGE = 15;
+
 	int records_number, pages_number, current_page;
-	int group_current;
+	int groups, group_current;
+	String movie_id = "";
 	PaginationProcess pp = new PaginationProcess();
+	CatalogProcess cp = new CatalogProcess();
+	MovieBean current_movie = null;
 
 	public GetImagesServlet() {
 		super();
 		current_page = 1;
-		group_current= 1;
-		setPageNum(group_current+"");
+		group_current = 1;
+		setPageNum();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -43,20 +49,19 @@ public class GetImagesServlet extends HttpServlet {
 		// int currentPage =
 		// Integer.parseInt(request.getParameter("currentPage"));
 		String operation = request.getParameter("operation");
+		String url = "";
+		List<PictureBean> pictures = null;
+
 		String group = request.getParameter("group");
-		
 
 		if (group == null) {
 			group = group_current + "";
-		}else{
-			if(Integer.parseInt(group) != group_current){
-				setPageNum(group);
+		} else {
+			if (Integer.parseInt(group) != group_current) {
 				group_current = Integer.parseInt(group);
 				current_page = 1;
 			}
 		}
-		
-	
 
 		System.out.println("operation : " + operation);
 		if (operation != null && operation.equals("next")) {
@@ -82,27 +87,74 @@ public class GetImagesServlet extends HttpServlet {
 
 		}
 
-		List<PictureBean> pictures = pp.getPicturesByPage(current_page,
-				NUMBER_OF_PER_PAGE, group);
 		HttpSession hs = request.getSession();
+		List<MovieBean> movies = cp.getMovies();
+
+		String movie_id = request.getParameter("movie_id");
+
+		if (movie_id != null && operation.equals("chooseMovie")) {
+			
+			setPageNum(movie_id,group);
+			for (MovieBean m : movies) {
+				if (movie_id.equals(m.getMovie_id())) {
+					current_movie = m;
+					hs.setAttribute("current_movie", m);
+					groups = m.getGroups();
+					hs.setAttribute("groups", groups + "");
+					hs.setAttribute("movie_name", m.getMovie_name());
+					break;
+				}
+			}
+			pictures = pp.getPicturesByPage(current_page, NUMBER_OF_PER_PAGE,
+					current_movie.getMovie_id());
+
+		} else {
+			pictures = pp.getPicturesByPage(current_page, NUMBER_OF_PER_PAGE);
+		}
+
+		if (operation != null && operation.equals("chooseGroup")) {
+
+
+			setPageNum(current_movie.getMovie_id(), group);
+			pictures = pp.getPicturesByPage(current_page, NUMBER_OF_PER_PAGE,
+					group, current_movie.getMovie_id());
+			
+		}
+
 		hs.setAttribute("pictures", pictures);
-		// request.getRequestDispatcher("main.jsp?currentPage="+current_page+"&pages="+pages_number).forward(request,
-		// response);
-		response.sendRedirect("main.jsp?currentPage=" + current_page
-				+ "&pages=" + pages_number + "&group=Group " + group);
+		hs.setAttribute("movies", movies);
+//		request.getRequestDispatcher("main.jsp?currentPage=" + current_page + "&pages="
+//				+ pages_number + "&group=Group " + group).forward(request,response);
+//		
+		response.sendRedirect("main.jsp?currentPage=" + current_page + "&pages=" + pages_number + "&group=Group " + group);
 	}
-	
-	public void setPageNum(String g){
-		records_number = pp.getRecords(g);
+
+	public void setPageNum() {
+		records_number = pp.getRecords();
+		set(records_number);
+	}
+
+	public void setPageNum(String movie_id) {
+		records_number = pp.getRecords(movie_id);
+		set(records_number);
+	}
+
+	public void setPageNum(String movie_id, String group) {
+		records_number = pp.getRecords(movie_id, group);
+		set(records_number);
+	}
+
+	public void set(int records_number) {
+
 		if (records_number < NUMBER_OF_PER_PAGE) {
 			pages_number = 1;
-		}else {
-			if(records_number % NUMBER_OF_PER_PAGE == 0){
+		} else {
+			if (records_number % NUMBER_OF_PER_PAGE == 0) {
 				pages_number = records_number / NUMBER_OF_PER_PAGE;
-			}else{
+			} else {
 				pages_number = records_number / NUMBER_OF_PER_PAGE + 1;
 			}
-			
+
 		}
 	}
 

@@ -93,7 +93,7 @@ public class GoodOrNotServlet extends HttpServlet {
 					isLike = false;
 				}
 			} else {
-				if (Integer.parseInt( memory.get(id).toString()) == 1) {
+				if ((int) memory.get(id) == 1) {
 					isLike = false;
 					memory.remove(id);
 					memory.put(id, 0);
