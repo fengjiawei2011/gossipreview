@@ -5,8 +5,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	//List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
-	List<GossipBean> pictures = (List<GossipBean>) request.getAttribute("gossips");
-	List<MovieBean> movies = (List<MovieBean>) request.getAttribute("movies");
+	List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
+	List<MovieBean> movies = (List<MovieBean>) session.getAttribute("movies");
 	String group = request.getParameter("group");
 	String interest = "";
 	String currentPage = request.getParameter("current_page");
@@ -215,7 +215,7 @@
 		<%
 			if (pictures != null) {
 				for (int i = 0; i < pictures.size(); i++) {
-					if (pictures.get(i).getIsInteresting() == "0") {
+					if (pictures.get(i).getIsInteresting().equals("0")) {
 						interest = "like";
 					} else {
 						interest = "unlike";

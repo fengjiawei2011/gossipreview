@@ -10,10 +10,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import dao.GossipDao;
 import dao.PicDao;
 
 public class LikeProcess {
-	PicDao p_dao = new PicDao();
+	GossipDao gd = new GossipDao();
 	public void updateByMap(Map<String, Object> map){
 		Set<Entry<String, Object>> set = map.entrySet();
 		Iterator<Entry<String, Object>> i = set.iterator();
@@ -26,7 +27,7 @@ public class LikeProcess {
 			Map.Entry<String, Object> me= (Map.Entry<String, Object>)i.next();
 			String key_id = me.getKey();
 			int value_isLike = ((Integer)me.getValue()).intValue();
-			p_dao.updateLike(con, key_id, value_isLike);
+			gd.updateLike(con, key_id, value_isLike);
 		}
 		
 		DBConnectionHelper.closeConnection(con);
@@ -35,7 +36,7 @@ public class LikeProcess {
 	
 	public void update(String id, int isLike ){
 		Connection con = new DBConnectionHelper().connectDatabase();
-		p_dao.updateLike(con, id, isLike);
+		gd.updateLike(con, id, isLike);
 		DBConnectionHelper.closeConnection(con);
 	}
 

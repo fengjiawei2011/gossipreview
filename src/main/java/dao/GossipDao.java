@@ -1,6 +1,7 @@
 package dao;
 
 import helper.DBConnectionHelper;
+import helper.ProjectHelper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -59,7 +60,19 @@ public class GossipDao {
 				gb.setId(rs.getInt("id"));
 				gb.setImage_add(rs.getString("image_add"));
 				gb.setImage_url(rs.getString("image_url"));
-				gb.setIsInteresting(rs.getString("isInteresting"));
+				
+				if(rs.getString("isInteresting") != null){
+					if (rs.getString("isInteresting").equals("0")|| rs.getString("isInteresting").equals("1")) {
+						gb.setIsInteresting(rs.getString("isInteresting"));
+					} else {
+						gb.setIsInteresting("0");
+					}
+				}else{
+					gb.setIsInteresting("0");
+				}
+				
+				System.out.println("id = "+rs.getInt("id")+"   isInteresting = " + rs.getString("isInteresting"));
+				//gb.setIsInteresting(rs.getString("isInteresting"));
 				gb.setKey_word(rs.getString("key_word"));
 				gb.setMovie_id(rs.getString("movie_id"));
 				gb.setMovie_name(rs.getString("movie_name"));
@@ -204,6 +217,26 @@ public int getRecords(){
 
 		}
 		return pictures;
+	}
+	
+	public void updateLike(Connection con, String id, int islike) {
+		ProjectHelper helper = new ProjectHelper();
+		DBConnectionHelper dbHelper = new DBConnectionHelper();
+		// Connection con = helper.connectDatabase();
+		Statement s = null;
+		String sql = "update " + dbHelper.getTable() + " set isInteresting = '"
+				+ islike + "'  where id = " + id;
+		System.out.println(sql);
+		try {
+			s = con.createStatement();
+			s.executeUpdate(sql);
+			System.out.println("update like successful ");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("update like error ");
+		}
+
 	}
 
 }

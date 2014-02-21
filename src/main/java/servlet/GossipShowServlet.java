@@ -39,11 +39,12 @@ public class GossipShowServlet extends HttpServlet {
 		GossipProcess gp = new GossipProcess();
 		//HttpSession hs = request.getSession();
 		//hs.setAttribute("gossips", gp.getAllGossips());
-		String movie_id = request.getParameter("movie_id");
+		
 		String operation = request.getParameter("operation");
 		List<MovieBean>  movies = pp.getMovies();
 		List<GossipBean> gossips = null;
 		HttpSession hs = request.getSession();
+		
 		
 		if (operation != null && operation.equals("next")) {
 			if (GoodOrNotServlet.memory != null) {
@@ -53,21 +54,20 @@ public class GossipShowServlet extends HttpServlet {
 			GossipShowServlet.current_page++;
 
 		} else if (operation != null && operation.equals("prev")) {
-			if (GoodOrNotServlet.memory != null
-					&& !GoodOrNotServlet.memory.isEmpty()) {
+			if (GoodOrNotServlet.memory != null && !GoodOrNotServlet.memory.isEmpty()) {
 				GoodOrNotServlet.memory.clear();
 			}
 			GossipShowServlet.current_page--;
 		} else if (operation != null && operation.equals("saveNext")) {
 			GossipShowServlet.current_page++;
-			if (GoodOrNotServlet.memory != null
-					&& !GoodOrNotServlet.memory.isEmpty()) {
+			if (GoodOrNotServlet.memory != null && !GoodOrNotServlet.memory.isEmpty()) {
 				GoodOrNotServlet.lp.updateByMap(GoodOrNotServlet.memory);
 				GoodOrNotServlet.memory.clear();
 			}
 
 		}
-		if (movie_id != null && operation.equals("chooseMovie")) {
+		if (operation != null && operation.equals("chooseMovie")) {
+			String movie_id = request.getParameter("movie_id");
 			this.current_page = 1;
 			setPageNum(movie_id);
 			for (MovieBean m : movies) {
@@ -79,15 +79,21 @@ public class GossipShowServlet extends HttpServlet {
 					break;
 				}
 			}
-			gossips = pp.getGossipsByPage(current_page, NUMBER_OF_PER_PAGE,
-					current_movie.getMovie_id());
+			gossips = pp.getGossipsByPage(current_page, NUMBER_OF_PER_PAGE, current_movie.getMovie_id());
 
-		} else {
+		}
+		
+		if(current_movie != null){
+			gossips = pp.getGossipsByPage(current_page, NUMBER_OF_PER_PAGE, current_movie.getMovie_id());
+		}else{
 			gossips = pp.getGossipsByPage(current_page, NUMBER_OF_PER_PAGE);
 		}
-		request.setAttribute("movies", movies);
-		request.setAttribute("gossips", gossips);
-		request.getRequestDispatcher("main.jsp?pages_num="+pages_num+"&current_page="+current_page).forward(request,response);
+//		request.setAttribute("movies", movies);
+//		request.setAttribute("gossips", gossips);
+//		request.getRequestDispatcher("main.jsp?pages_num="+pages_num+"&current_page="+current_page).forward(request,response);
+		hs.setAttribute("movies", movies);
+		hs.setAttribute("gossips", gossips);
+		response.sendRedirect("main.jsp?pages_num="+pages_num+"&current_page="+current_page);
 	}
 	
 	

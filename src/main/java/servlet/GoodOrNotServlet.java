@@ -67,21 +67,8 @@ public class GoodOrNotServlet extends HttpServlet {
 				like = 0;
 			}
 			
-			
-			// lp.update(id, like);
 			Boolean isLike = false;
-			// System.out.println(isLike_p);
-			// if(isLike_p.equals("like")){
-			// isLike = true;
-			//
-			// }else{
-			// isLike = false;
-			// lp.update(id, 0);
-			// }
-			//
-			// System.out.println("success'");
-
-			// System.out.println("id="+ id);
+		
 			if (!memory.containsKey(id)) {
 				memory.put(id, like);
 				if (like == 1) {
@@ -90,7 +77,7 @@ public class GoodOrNotServlet extends HttpServlet {
 					isLike = false;
 				}
 			} else {
-				if ( Integer.parseInt(memory.get(id) == 1)) {
+				if ( (Integer)memory.get(id) == 1) {
 					isLike = false;
 					memory.remove(id);
 					memory.put(id, 0);
