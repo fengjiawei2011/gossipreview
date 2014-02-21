@@ -4,17 +4,13 @@
 <%@ page import="beans.*;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	List<PictureBean> pictures = (List<PictureBean>) session.getAttribute("pictures");
-	List<MovieBean> movies = (List<MovieBean>) session.getAttribute("movies");
-	//int groups = (int) session.getAttribute("groups");
-	
-	String group = request.getParameter("group");
+	List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
+	//List<MovieBean> movies = (List<MovieBean>) session.getAttribute("movies");
+String group = request.getParameter("group");
 	String interest = "";
-	String currentPage = request.getParameter("currentPage");
-	String pages = request.getParameter("pages");
-	MovieBean current_movie = (MovieBean)session.getAttribute("current_movie");
-	//System.out.println("currentpage --->" + currentPage);
-	//System.out.println("pictures size--->" + pictures.size());
+	//String currentPage = request.getParameter("currentPage");
+	//String pages = request.getParameter("pages");
+	//MovieBean current_movie = (MovieBean)session.getAttribute("current_movie");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -31,13 +27,6 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
-
-		/* var l = $('#islike').attr("class").substring(0,6) ;
-		if( l == "like"){
-		$('#islike').addClass("glyphicon glyphicon-ok");
-		}else{
-		$('#islike').addClass("glyphicon glyphicon-remove");
-		}  */
 
 		//vendor script
 		$('#header').css({
@@ -186,45 +175,16 @@
 			<li><a href="#" onclick="save()">save</a></li>
 			<li id="prev"><a href="show?operation=prev"
 				onclick="return prev()">Previous</a></li>
-			<li><span> <label id="currentPage"><%=currentPage%></label>
-					of <label id="pages"><%=pages%></label>
+			<li><span> <label id="currentPage"><!-- Current Page --></label>
+					of <label id="pages"><!-- all pages  -->></label>
 			</span></li>
 			<li id="next"><a href="show?operation=next"
 				onclick="return next()">Next</a></li>
 			<li id="saveNext"><a href="show?operation=saveNext"
 				onclick="return next()">Save&Next</a></li>
 			<li>
-				<div class="btn-group">
-					<button type="button" class="btn btn-info dropdown-toggle"
-						data-toggle="dropdown">
-						<% if(current_movie != null){ %> <%=current_movie.getMovie_name() %>
-						
-						<%}else{ %>Choose Movie <%} %><span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" role="menu">
-						<%for (MovieBean movie : movies) {%>
-						<li><a href="show?movie_id=<%=movie.getMovie_id()%>&operation=chooseMovie"><%=movie.getMovie_name()%></a></li>
-						<%}%>
-					</ul>
-				</div>
-
+			
 			</li>
-			<% String groups = (String)session.getAttribute("groups");
-			if(groups != null){%>
-			<li><div class="btn-group">
-					<button type="button" class="btn btn-info dropdown-toggle"
-						data-toggle="dropdown">
-						<%=group%>
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" role="menu">
-						<%for(int i=1; i <= Integer.parseInt(groups); i++){ %>
-						<li><a href="show?group=<%=i%>&operation=chooseGroup">Group <%=i%></a></li>
-						<%} %>
-					</ul>
-				</div>
-		   </li>
-		   <%} %>
 		</ul>
 	</div>
 	<div class="clearfix"></div>
@@ -235,12 +195,11 @@
 	<h3>Picture Review</h3>
 	</hgroup> -->
 
-
 	<div id="container">
 		<%
 			if (pictures != null) {
 				for (int i = 0; i < pictures.size(); i++) {
-					if (pictures.get(i).getInteresting() == 0) {
+					if (pictures.get(i).getIsInteresting() == "0") {
 						interest = "like";
 					} else {
 						interest = "unlike";
@@ -248,12 +207,12 @@
 		%>
 		<div class="grid">
 			<div class="imgholder">
-				<a href=".<%=pictures.get(i).getLocal_add()%>"><img
-					src=".<%=pictures.get(i).getLocal_add()%>" /></a>
+				<a href="<%=pictures.get(i).getImage_url()%>"><img
+					src="<%=pictures.get(i).getImage_url()%>" /></a>
 			</div>
-			<strong><%=pictures.get(i).getTitle()%></strong>
+			<strong><a href="<%=pictures.get(i).getGossip_url()%>"><%=pictures.get(i).getTitle()%></a></strong>
 			<!-- title  -->
-			<p><%=pictures.get(i).getAlt()%></p>
+			<p><%=pictures.get(i).getContent()%></p>
 			<!-- description  -->
 			<div>
 				<%if (interest.equals("like")){%>
@@ -264,7 +223,7 @@
 				<%}%>
 				<a href="#" id="<%=pictures.get(i).getId()%>"
 					onclick="like('<%=pictures.get(i).getId()%>')"><%=interest%></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<a href="<%=pictures.get(i).getSource()%>">source</a>
+				<a href="<%=pictures.get(i).getGossip_url()%>">source</a>
 
 			</div>
 		</div>
