@@ -4,12 +4,13 @@
 <%@ page import="beans.*;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
+	//List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
+	List<GossipBean> pictures = (List<GossipBean>) request.getAttribute("gossips");
 	//List<MovieBean> movies = (List<MovieBean>) session.getAttribute("movies");
-String group = request.getParameter("group");
+	String group = request.getParameter("group");
 	String interest = "";
-	//String currentPage = request.getParameter("currentPage");
-	//String pages = request.getParameter("pages");
+	String currentPage = request.getParameter("current_page");
+	String pages = request.getParameter("pages_number");
 	//MovieBean current_movie = (MovieBean)session.getAttribute("current_movie");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -175,8 +176,8 @@ String group = request.getParameter("group");
 			<li><a href="#" onclick="save()">save</a></li>
 			<li id="prev"><a href="show?operation=prev"
 				onclick="return prev()">Previous</a></li>
-			<li><span> <label id="currentPage"><!-- Current Page --></label>
-					of <label id="pages"><!-- all pages  -->></label>
+			<li><span> <label id="currentPage"><%=currentPage%></label>
+					of <label id="pages"><%=pages%></label>
 			</span></li>
 			<li id="next"><a href="show?operation=next"
 				onclick="return next()">Next</a></li>
