@@ -174,39 +174,54 @@
 	<div>
 		<ul class="pager">
 			<li><a href="#" onclick="save()">save</a></li>
-			<li id="prev"><a href= "showgossips?operation=prev&pages_num=<%=pages%>&current_page=<%=currentPage%>"
+			<li id="prev"><a
+				href="showgossips?operation=prev&pages_num=<%=pages%>&current_page=<%=currentPage%>"
 				onclick="return prev()">Previous</a></li>
 			<li><span> <label id="currentPage"><%=currentPage%></label>
 					of <label id="pages"><%=pages%></label>
 			</span></li>
-			<li id="next"><a href="showgossips?operation=next&pages_num=<%=pages%>&current_page=<%=currentPage%>"
+			<li id="next"><a
+				href="showgossips?operation=next&pages_num=<%=pages%>&current_page=<%=currentPage%>"
 				onclick="return next()">Next</a></li>
 			<li id="saveNext"><a href="showgossips?operation=saveNext"
 				onclick="return next()">Save&Next</a></li>
 			<li>
 			<li>
 				<div class="btn-group">
-					
+
 					<button type="button" class="btn btn-info dropdown-toggle"
 						data-toggle="dropdown">
-						<% if(current_movie != null){ %> <%=current_movie.getMovie_name() %>
-						
-						<%}else{ %>Choose Movie <%} %><span class="caret"></span>
+						<%
+							if (current_movie != null) {
+						%>
+						<%=current_movie.getMovie_name()%>
+
+						<%
+							} else {
+						%>Choose Movie
+						<%
+							}
+						%><span class="caret"></span>
 					</button>
-					
-					<ul class="dropdown-menu" role="menu">
-						<%for (MovieBean movie : movies) {%>
-						<li><a href="showgossips?movie_id=<%=movie.getMovie_id()%>&operation=chooseMovie"><%=movie.getMovie_name()%></a></li>
-						<%}%>
+
+					<ul  style="overflow-y: scroll;height: 500px" class="dropdown-menu" role="menu">
+						<%
+							for (MovieBean movie : movies) {
+						%>
+						<li><a
+							href="showgossips?movie_id=<%=movie.getMovie_id()%>&operation=chooseMovie"><%=movie.getMovie_name()%></a></li>
+						<%
+							}
+						%>
 					</ul>
 				</div>
-
-			</li>
 			</li>
 		</ul>
 	</div>
 	<div class="clearfix"></div>
 	</header>
+	
+	
 	<!-- Content -->
 	<section id="wrapper"> <!--  <hgroup>
 	<h2>Picture Review</h2>
@@ -214,6 +229,7 @@
 	</hgroup> -->
 
 	<div id="container">
+		
 		<%
 			if (pictures != null) {
 				for (int i = 0; i < pictures.size(); i++) {
@@ -233,12 +249,19 @@
 			<p><%=pictures.get(i).getContent()%></p>
 			<!-- description  -->
 			<div>
-				<%if (interest.equals("like")){%>
-				<label id="lab_<%=pictures.get(i).getId()%>"class="glyphicon glyphicon-ok"></label>
-				<%}else {%>
-					<label id="lab_<%=pictures.get(i).getId()%>"
+				<%
+					if (interest.equals("like")) {
+				%>
+				<label id="lab_<%=pictures.get(i).getId()%>"
+					class="glyphicon glyphicon-ok"></label>
+				<%
+					} else {
+				%>
+				<label id="lab_<%=pictures.get(i).getId()%>"
 					class="glyphicon glyphicon-remove"></label>
-				<%}%>
+				<%
+					}
+				%>
 				<a href="#" id="<%=pictures.get(i).getId()%>"
 					onclick="like('<%=pictures.get(i).getId()%>')"><%=interest%></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="<%=pictures.get(i).getGossip_url()%>">source</a>
