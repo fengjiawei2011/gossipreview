@@ -262,7 +262,7 @@
 				<%
 					}
 				%>
-				<a href="#" id="<%=pictures.get(i).getId()%>"
+				<a style="cursor: pointer" id="<%=pictures.get(i).getId()%>"
 					onclick="like('<%=pictures.get(i).getId()%>')"><%=interest%></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				<a href="<%=pictures.get(i).getGossip_url()%>">source</a>
 
