@@ -71,11 +71,12 @@ public class GossipDao {
 					gb.setIsInteresting("0");
 				}
 				
-				System.out.println("id = "+rs.getInt("id")+"   isInteresting = " + rs.getString("isInteresting"));
+				//System.out.println("id = "+rs.getInt("id")+"   isInteresting = " + rs.getString("isInteresting"));
 				//gb.setIsInteresting(rs.getString("isInteresting"));
 				gb.setKey_word(rs.getString("key_word"));
 				gb.setMovie_id(rs.getString("movie_id"));
 				gb.setMovie_name(rs.getString("movie_name"));
+				//System.out.println(rs.getString("movie_name"));
 				gb.setTitle(rs.getString("title"));
 				
 				empty.add(gb);

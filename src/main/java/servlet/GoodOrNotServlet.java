@@ -21,14 +21,9 @@ import process.LikeProcess;
 @WebServlet("/like")
 public class GoodOrNotServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static Map<String, Object> memory;
-	public static LikeProcess lp;
 
 	public GoodOrNotServlet() {
 		super();
-		memory = new LinkedHashMap<String, Object>();
-		lp = new LikeProcess();
-
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -45,8 +40,8 @@ public class GoodOrNotServlet extends HttpServlet {
 	public void likeFunction(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		
+		Map<String, Object> memory = (Map<String, Object>)request.getSession().getAttribute("memory");
+		LikeProcess lp = new LikeProcess();
 		String save = request.getParameter("save");
 		//System.out.println("=--->" + save);
 		if (save != null && save.equals("save")) {

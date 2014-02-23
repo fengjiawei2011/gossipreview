@@ -4,13 +4,13 @@
 <%@ page import="beans.*;"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
-	//List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
-	List<GossipBean> pictures = (List<GossipBean>) session.getAttribute("gossips");
+	List<GossipBean> pictures = (List<GossipBean>) request.getAttribute("gossips");
 	List<MovieBean> movies = (List<MovieBean>) session.getAttribute("movies");
-	String group = request.getParameter("group");
 	String interest = "";
-	String currentPage = request.getParameter("current_page");
-	String pages = request.getParameter("pages_num");
+	//String currentPage = request.getParameter("current_page");
+	//String pages = request.getParameter("pages_num");
+	int currentPage = ((Integer)session.getAttribute("current_page")).intValue();
+	int pages = (Integer)session.getAttribute("pages_num");
 	MovieBean current_movie = (MovieBean)session.getAttribute("current_movie");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -186,12 +186,14 @@
 			<li>
 			<li>
 				<div class="btn-group">
+					
 					<button type="button" class="btn btn-info dropdown-toggle"
 						data-toggle="dropdown">
 						<% if(current_movie != null){ %> <%=current_movie.getMovie_name() %>
 						
 						<%}else{ %>Choose Movie <%} %><span class="caret"></span>
 					</button>
+					
 					<ul class="dropdown-menu" role="menu">
 						<%for (MovieBean movie : movies) {%>
 						<li><a href="showgossips?movie_id=<%=movie.getMovie_id()%>&operation=chooseMovie"><%=movie.getMovie_name()%></a></li>
@@ -223,8 +225,8 @@
 		%>
 		<div class="grid">
 			<div class="imgholder">
-				<a href="<%=pictures.get(i).getImage_url()%>"><img
-					src="<%=pictures.get(i).getImage_url()%>" /></a>
+				<a href=".<%=pictures.get(i).getImage_add()%>"><img
+					src=".<%=pictures.get(i).getImage_add()%>" /></a>
 			</div>
 			<strong><a href="<%=pictures.get(i).getGossip_url()%>"><%=pictures.get(i).getTitle()%></a></strong>
 			<!-- title  -->
@@ -246,7 +248,7 @@
 		<%
 			}
 			} else {
-				response.sendRedirect("index.jsp");
+				//response.sendRedirect("index.jsp");
 			}
 		%>
 	</div>

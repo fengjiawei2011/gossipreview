@@ -2,5 +2,5 @@
     pageEncoding="ISO-8859-1"%>
 <%
 	session.removeAttribute("current_movie");
-	response.sendRedirect("showgossips");
+	response.sendRedirect("showgossips?operation=showAll");
 %>

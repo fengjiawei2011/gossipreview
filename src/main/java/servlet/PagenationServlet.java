@@ -27,35 +27,35 @@ public class PagenationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		String operation = request.getParameter("operation");
-		int current_page = Integer.parseInt(request.getParameter("current_page"));
-		String pages_num = request.getParameter("pages_num");
-		
-		if (operation != null && operation.equals("next")) {
-			if (GoodOrNotServlet.memory != null) {
-				GoodOrNotServlet.memory.clear();
-			}
-
-			GossipShowServlet.current_page++;
-
-		} else if (operation != null && operation.equals("prev")) {
-			if (GoodOrNotServlet.memory != null
-					&& !GoodOrNotServlet.memory.isEmpty()) {
-				GoodOrNotServlet.memory.clear();
-			}
-			GossipShowServlet.current_page = current_page--;
-		} else if (operation != null && operation.equals("saveNext")) {
-			GossipShowServlet.current_page = current_page++;
-			if (GoodOrNotServlet.memory != null
-					&& !GoodOrNotServlet.memory.isEmpty()) {
-				GoodOrNotServlet.lp.updateByMap(GoodOrNotServlet.memory);
-				GoodOrNotServlet.memory.clear();
-			}
-
-		}
-		request.setAttribute("gossips", pp.getGossipsByPage(current_page, GossipShowServlet.NUMBER_OF_PER_PAGE));
-		//response.sendRedirect("main.jsp");
-		request.getRequestDispatcher("/showgossips").forward(request,response);
+//		String operation = request.getParameter("operation");
+//		int current_page = Integer.parseInt(request.getParameter("current_page"));
+//		String pages_num = request.getParameter("pages_num");
+//		
+//		if (operation != null && operation.equals("next")) {
+//			if (GoodOrNotServlet.memory != null) {
+//				GoodOrNotServlet.memory.clear();
+//			}
+//
+//			current_page++;
+//
+//		} else if (operation != null && operation.equals("prev")) {
+//			if (GoodOrNotServlet.memory != null
+//					&& !GoodOrNotServlet.memory.isEmpty()) {
+//				GoodOrNotServlet.memory.clear();
+//			}
+//			current_page = current_page--;
+//		} else if (operation != null && operation.equals("saveNext")) {
+//			current_page = current_page++;
+//			if (GoodOrNotServlet.memory != null
+//					&& !GoodOrNotServlet.memory.isEmpty()) {
+//				GoodOrNotServlet.lp.updateByMap(GoodOrNotServlet.memory);
+//				GoodOrNotServlet.memory.clear();
+//			}
+//
+//		}
+//		request.setAttribute("gossips", pp.getGossipsByPage(current_page, GossipShowServlet.NUMBER_OF_PER_PAGE));
+//		//response.sendRedirect("main.jsp");
+//		request.getRequestDispatcher("/showgossips").forward(request,response);
 		
 	}
 

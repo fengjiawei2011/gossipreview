@@ -23,9 +23,10 @@ public class GetImagesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	final int NUMBER_OF_PER_PAGE = 15;
 
-	static int  records_number; 
-	static int pages_number,current_page;
+	int  records_number; 
+	int pages_number,current_page;
 	int groups, group_current;
+	
 	String movie_id = "";
 	PaginationProcess pp = new PaginationProcess();
 	CatalogProcess cp = new CatalogProcess();
@@ -49,7 +50,7 @@ public class GetImagesServlet extends HttpServlet {
 		// List<PictureBean> pictures = picDao.getAllEntries();
 		// int currentPage =
 		// Integer.parseInt(request.getParameter("currentPage"));
-		String operation = request.getParameter("operation");
+		/*String operation = request.getParameter("operation");
 		String url = "";
 		List<PictureBean> pictures = null;
 
@@ -127,7 +128,7 @@ public class GetImagesServlet extends HttpServlet {
 //		request.getRequestDispatcher("main.jsp?currentPage=" + current_page + "&pages="
 //				+ pages_number + "&group=Group " + group).forward(request,response);
 //		
-		response.sendRedirect("main.jsp?currentPage=" + current_page + "&pages=" + pages_number + "&group=Group " + group);
+		response.sendRedirect("main.jsp?currentPage=" + current_page + "&pages=" + pages_number + "&group=Group " + group);*/
 	}
 
 	public void setPageNum() {

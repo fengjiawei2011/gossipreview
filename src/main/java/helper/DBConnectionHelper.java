@@ -11,8 +11,8 @@ public class DBConnectionHelper {
 	private String dbDriver = "com.mysql.jdbc.Driver";
 	private String username = "root";
 	private String password = "root";
-	private String URL = "jdbc:mysql://localhost/contentdiary";
-	private String table = "gossip";
+	private String URL = "jdbc:mysql://localhost/ContentDiary";
+	private String table = "Gossip";
 	
 	
 	public Connection connectDatabase() {
