@@ -10,10 +10,10 @@ public class DBConnectionHelper {
 	
 	private String dbDriver = "com.mysql.jdbc.Driver";
 	private String username = "root";
-	private String password = "111111";
-	private String URL = "jdbc:mysql://192.168.1.55/ContentDiary";
-//	private String password = "root";
-//	private String URL = "jdbc:mysql://localhost/ContentDiary";
+//	private String password = "111111";
+//	private String URL = "jdbc:mysql://192.168.1.55/ContentDiary";
+	private String password = "root";
+	private String URL = "jdbc:mysql://localhost/ContentDiary";
 	private String table = "Gossip";
 	
 	

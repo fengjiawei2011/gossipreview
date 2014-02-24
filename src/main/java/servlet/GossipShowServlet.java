@@ -1,6 +1,7 @@
 package servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ import process.LikeProcess;
 public class GossipShowServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	final static int NUMBER_OF_PER_PAGE = 15;
-	GossipProcess pp = new GossipProcess();
+	
 	//MovieBean current_movie = null;
 	//int records_number, pages_num, current_page;
 
@@ -111,54 +112,33 @@ public class GossipShowServlet extends HttpServlet {
 		String operation = request.getParameter("operation");
 		HttpSession hs = request.getSession();
 		LikeProcess lp = new LikeProcess();
+		GossipProcess pp = new GossipProcess();
 		
 		if(operation != null && operation.equals("next")) {
 			
-			if (request.getSession().getAttribute("memory") != null) {
-				((Map<String, Object>)request.getSession().getAttribute("memory")).clear();
-			}
-			int currentPage =((Integer)hs.getAttribute("current_page")).intValue();
-			hs.setAttribute("current_page",++currentPage);
+			clearMemory(hs);
+			setCurrentPage(hs,"next");
 			//get next page gossip
-			MovieBean mb = (MovieBean)hs.getAttribute("current_movie");
-			if(mb != null){
-				gossips = pp.getGossipsByPage(currentPage, NUMBER_OF_PER_PAGE,mb.getMovie_id());
-			}else{
-				gossips = pp.getGossipsByPage(currentPage, NUMBER_OF_PER_PAGE);
-			}
+			gossips = getGossips(hs);
 			
 		}else if (operation != null && operation.equals("prev")) {
 
-			if (request.getSession().getAttribute("memory") != null) {
-				((Map<String, Object>)request.getSession().getAttribute("memory")).clear();
-			}
-			
-			int currentPage =((Integer)hs.getAttribute("current_page")).intValue();
-			hs.setAttribute("current_page",--currentPage );
+			clearMemory(hs);
+			setCurrentPage(hs,"pre");
 			//get prev page gossip
-			MovieBean mb = (MovieBean)hs.getAttribute("current_movie");
-			if(mb != null){
-				gossips = pp.getGossipsByPage(currentPage, NUMBER_OF_PER_PAGE,mb.getMovie_id());
-			}else{
-				gossips = pp.getGossipsByPage(currentPage, NUMBER_OF_PER_PAGE);
-			}
+			gossips = getGossips(hs);
 			
 		}else if (operation != null && operation.equals("saveNext")) {
 			
-			Map<String, Object> memory =(Map<String, Object>) request.getSession().getAttribute("memory");
+			Map<String, Object> memory =(Map<String, Object>)hs.getAttribute("memory");
 			int currentPage =((Integer)hs.getAttribute("current_page")).intValue();
 			hs.setAttribute("current_page",++currentPage);
 			if (memory != null && ! memory.isEmpty()) {
 				lp.updateByMap(memory);
 				memory.clear();
 			}
-			
-			MovieBean mb = (MovieBean)hs.getAttribute("current_movie");
-			if(mb != null){
-				gossips = pp.getGossipsByPage(currentPage, NUMBER_OF_PER_PAGE,mb.getMovie_id());
-			}else{
-				gossips = pp.getGossipsByPage(currentPage, NUMBER_OF_PER_PAGE);
-			}
+
+			gossips = getGossips(hs);
 			
 		}else if(operation != null && operation.equals("showAll")){
 			
@@ -184,14 +164,9 @@ public class GossipShowServlet extends HttpServlet {
 		request.setAttribute("gossips", gossips);
 		request.getRequestDispatcher(url).forward(request,response);
 	}
-
-//	public void setPageNum() {
-//		records_number = pp.getRecords();
-//		set(records_number);
-//	}
 	
 	
-	public MovieBean getCurrentMovie(String movie_id , List<MovieBean> movies){
+	private MovieBean getCurrentMovie(String movie_id , List<MovieBean> movies){
 		MovieBean currentM = null;
 		for (MovieBean m : movies) {
 			if (movie_id.equals(m.getMovie_id())) {
@@ -201,7 +176,10 @@ public class GossipShowServlet extends HttpServlet {
 		
 		return currentM;
 	}
-	public int getPages(String movie_id){
+	
+	
+	private int getPages(String movie_id){
+		GossipProcess pp = new GossipProcess();
 		int recordsNum = pp.getRecords(movie_id);
 		int pagesNum = 0;
 		if (recordsNum < NUMBER_OF_PER_PAGE) {
@@ -217,7 +195,8 @@ public class GossipShowServlet extends HttpServlet {
 		return pagesNum;
 	}
 	
-	public int getPages(){
+	private int getPages(){
+		GossipProcess pp = new GossipProcess();
 		int recordsNum = pp.getRecords();
 		int pagesNum = 0;
 		if (recordsNum < NUMBER_OF_PER_PAGE) {
@@ -232,24 +211,40 @@ public class GossipShowServlet extends HttpServlet {
 		}
 		return pagesNum;
 	}
-
-//	public void setPageNum(String movie_id) {
-//		records_number = pp.getRecords(movie_id);
-//		set(records_number);
-//	}
-//
-//	public void set(int records_number) {
-//
-//		if (records_number < NUMBER_OF_PER_PAGE) {
-//			pages_num = 1;
-//		} else {
-//			if (records_number % NUMBER_OF_PER_PAGE == 0) {
-//				pages_num = records_number / NUMBER_OF_PER_PAGE;
-//			} else {
-//				pages_num = records_number / NUMBER_OF_PER_PAGE + 1;
-//			}
-//
-//		}
-//	}
+	
+	private List<GossipBean> getGossips(HttpSession hs){
+		GossipProcess pp = new GossipProcess();
+		List<GossipBean> gossips = new ArrayList<GossipBean>();
+		MovieBean mb = (MovieBean)hs.getAttribute("current_movie");
+		if(mb != null){
+			gossips = pp.getGossipsByPage((Integer)hs.getAttribute("current_page"), NUMBER_OF_PER_PAGE,mb.getMovie_id());
+		}else{
+			gossips = pp.getGossipsByPage((Integer)hs.getAttribute("current_page"), NUMBER_OF_PER_PAGE);
+		}
+		
+		return gossips;
+	}
+	
+	private void setCurrentPage(HttpSession hs, String operation){
+		if(operation.equals("next")){
+			int currentPage =((Integer)hs.getAttribute("current_page")).intValue();
+			int pages_num = ((Integer)hs.getAttribute("pages_num")).intValue();
+			if(currentPage < pages_num){
+				hs.setAttribute("current_page",++currentPage);
+			}
+		}else if(operation.equals("pre")){
+			int currentPage =((Integer)hs.getAttribute("current_page")).intValue();
+			if(currentPage > 1){
+				hs.setAttribute("current_page",--currentPage );
+			}
+		}
+		
+	}
+	
+	private void clearMemory(HttpSession hs){
+		if (hs.getAttribute("memory") != null) {
+			((Map<String, Object>)hs.getAttribute("memory")).clear();
+		}
+	}
 
 }

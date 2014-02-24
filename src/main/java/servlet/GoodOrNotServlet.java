@@ -47,7 +47,7 @@ public class GoodOrNotServlet extends HttpServlet {
 		if (save != null && save.equals("save")) {
 			lp.updateByMap(memory);
 			memory.clear();
-			System.out.println("save map successfully");
+			//System.out.println("save map successfully");
 			map.put("success", " save successfully!!!!!");
 			//response.sendRedirect("index.jsp");
 			
@@ -85,18 +85,11 @@ public class GoodOrNotServlet extends HttpServlet {
 
 			map.put("isLike", isLike);
 			map.put("id", id);
-			//ProjectHelper.write(response, map);
+
 		}
 		
 		ProjectHelper.write(response, map);
 
-		
-		
-		// System.out.println("map----> "+map);
-		// System.out.println("memory-> "+memory);
-		
-
-		// response.sendRedirect("main.jsp");
 	}
 
 }
